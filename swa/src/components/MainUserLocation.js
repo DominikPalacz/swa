@@ -19,7 +19,7 @@ const MainUserLocation = () => {
 
     return (
         <ul>
-            <pre>{JSON.stringify(data)}</pre>
+            {/* <pre>{JSON.stringify(data)}</pre> */}
             user IP {data.ip} with it’s location on the map latitude{data.latitude} longitude {data.longitude}
         </ul>
     );

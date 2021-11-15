@@ -34,7 +34,7 @@ const Leaflet = () => {
         <MapContainer
             center={[52.2317008972168, 21.018339157104492]}
             zoom={13}
-            style={{ height: '100vh' }}>
+            style={{ height: '30vh' }}>
             <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"

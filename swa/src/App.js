@@ -4,6 +4,9 @@ import Leaflet from './components/Map';
 import 'bulma/css/bulma.min.css';
 
 function App() {
+  // todo can use Redux but atm it's overkill
+
+  
   return (
     <>
       <div className="columns">

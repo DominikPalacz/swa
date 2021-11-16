@@ -3,10 +3,24 @@ import './App.css';
 import MainUserLocation from '../src/components/MainUserLocation';
 import Leaflet from './components/Map';
 import 'bulma/css/bulma.min.css';
+import urlRegEx from "../src/utils/urlRegEx"
 
 function App() {
   // todo can use Redux but atm it's overkill
   const [name, setName] = useSesionStorage("name", "");
+  const [newSearch, setNewSearch] = useState("");
+
+  const onClickHandle = () => {
+
+    if (urlRegEx.test(name)) {
+      setNewSearch(name)
+      console.log('correct')
+    }
+    
+    if (!urlRegEx.test(name)) {
+      console.log('validation error')
+    }
+  }
 
   return (
     <>
@@ -32,14 +46,14 @@ function App() {
 
           <div className="columns">
             <div className="column">
-              <div class="field is-grouped">
-                <p class="control is-expanded">
-                  <input class="input" type="text" placeholder="Find a repository" value={name} onChange={(e) => setName(e.target.value)}></input>
+              <div className="field is-grouped">
+                <p className="control is-expanded">
+                  <input className="input" type="text" placeholder="Find a repository" value={name} onChange={(e) => setName(e.target.value)}></input>
 
                 </p>
-                <p class="control">
-                  <button class="button is-info">
-                    Search
+                <p className="control">
+                  <button className="button is-info" onClick={onClickHandle}>
+                    Search:
                   </button>
                 </p>
               </div>

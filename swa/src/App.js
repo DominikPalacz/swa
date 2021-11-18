@@ -12,7 +12,7 @@ function App() {
   // create global state - can use Redux but atm it's overkill
   const [list, setList] = useState([]);
 
-// eslint-disable-next-line
+  // eslint-disable-next-line
   const [newSearch, setNewSearch] = useState("");
 
   const onClickHandle = (e) => {
@@ -25,15 +25,13 @@ function App() {
     //   console.log('validation error')
     //   alert(`Wrong IP ${urlRegEx.test(name)}  address or URL ${regexExp.test(name)}, please provides a correct one.`) // todo fe. React-Toastify
     // }
-    if (regexExp.test(name.toString())) {
-      setNewSearch(name.toString())
-      setList(current => [...current, name.toString()])
+    if (urlRegEx.test(name) || regexExp.test(name)) {
+      setNewSearch(name)
+      setList(current => [...current, name])
       console.warn('jest prawdą IP', name)
+    } else {
+      alert(`Wrong IP address or URL , please provides a correct one.`) // todo fe. React-Toastify
     }
-
-    console.log('drugie wywołanie urlRegEx.test(name) || regexExp.test(name)', urlRegEx.test(name.toString()), regexExp.test(name.toString()))
-
-    alert(`Wrong IP ${urlRegEx.test(name.toString())}  address or URL ${regexExp.test(name.toString())}, please provides a correct one.`) // todo fe. React-Toastify
 
   }
 

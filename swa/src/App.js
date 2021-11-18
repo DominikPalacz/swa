@@ -4,22 +4,37 @@ import MainUserLocation from '../src/components/MainUserLocation';
 import Leaflet from './components/Map';
 import 'bulma/css/bulma.min.css';
 import urlRegEx from "../src/utils/urlRegEx"
+import regexExp from "../src/utils/checkIP"
+import ListOdAllSearches from "./components/ListOfAllSearches";
 
 function App() {
-  // todo can use Redux but atm it's overkill
   const [name, setName] = useSesionStorage("name", "");
+  // create global state - can use Redux but atm it's overkill
+  const [list, setList] = useState([]);
+
+// eslint-disable-next-line
   const [newSearch, setNewSearch] = useState("");
 
-  const onClickHandle = () => {
+  const onClickHandle = (e) => {
+    e.stopPropagation();
+    // if (urlRegEx.test(name) || regexExp.test(name)) {
+    //   setNewSearch(name)
+    //   setList(current => [...current, name])
+    //   console.log('correct', newSearch)
+    // } else {
+    //   console.log('validation error')
+    //   alert(`Wrong IP ${urlRegEx.test(name)}  address or URL ${regexExp.test(name)}, please provides a correct one.`) // todo fe. React-Toastify
+    // }
+    if (regexExp.test(name.toString())) {
+      setNewSearch(name.toString())
+      setList(current => [...current, name.toString()])
+      console.warn('jest prawdą IP', name)
+    }
 
-    if (urlRegEx.test(name)) {
-      setNewSearch(name)
-      console.log('correct')
-    }
-    
-    if (!urlRegEx.test(name)) {
-      console.log('validation error')
-    }
+    console.log('drugie wywołanie urlRegEx.test(name) || regexExp.test(name)', urlRegEx.test(name.toString()), regexExp.test(name.toString()))
+
+    alert(`Wrong IP ${urlRegEx.test(name.toString())}  address or URL ${regexExp.test(name.toString())}, please provides a correct one.`) // todo fe. React-Toastify
+
   }
 
   return (
@@ -28,6 +43,9 @@ function App() {
 
         <div className="column is-4">
           List of all searches
+          <p>{list.length}</p>
+          <pre>{regexExp.test(name)}</pre>
+          <ListOdAllSearches list={list} />
         </div>
 
         <div className="column">

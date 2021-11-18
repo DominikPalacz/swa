@@ -15,7 +15,7 @@ const MainUserLocation = () => {
 
         fetchData();
     }, []);
-    console.warn(data)
+    // console.warn(data)
 
     return (
         <ul>

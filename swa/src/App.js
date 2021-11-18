@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './App.css';
 import MainUserLocation from '../src/components/MainUserLocation';
 import Leaflet from './components/Map';
@@ -6,37 +6,46 @@ import 'bulma/css/bulma.min.css';
 import urlRegEx from "../src/utils/urlRegEx"
 import regexExp from "../src/utils/checkIP"
 import ListOdAllSearches from "./components/ListOfAllSearches";
+import axios from 'axios';
 
 function App() {
-  const [name, setName] = useSesionStorage("name", "");
   // create global state - can use Redux but atm it's overkill
+  const [name, setName] = useSesionStorage("name", "");
   const [list, setList] = useState([]);
-
-  // eslint-disable-next-line
+  const [data, setCurrentData] = useState({ });
   const [newSearch, setNewSearch] = useState("");
-
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const value = name ? name : 'check';
+      const result = await axios(
+        `http://api.ipstack.com/${value}?access_key=17fa3c31eeb1d8677517482a8e88bc0b`, // todo 1 add process.env
+      );
+      console.log(result)
+      setCurrentData(result.data);
+      // console.log('%c Oh my name name! ', 'background: #987', name);
+      // console.log('%c Oh my all list! ', 'background: #876', list);
+      // console.log('%c Oh my all data! ', 'background: #765', data);
+      // console.log('%c Oh my newSearch! ', 'background: #654', newSearch);
+    };
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [list]);
+  
   const onClickHandle = (e) => {
     e.stopPropagation();
-    // if (urlRegEx.test(name) || regexExp.test(name)) {
-    //   setNewSearch(name)
-    //   setList(current => [...current, name])
-    //   console.log('correct', newSearch)
-    // } else {
-    //   console.log('validation error')
-    //   alert(`Wrong IP ${urlRegEx.test(name)}  address or URL ${regexExp.test(name)}, please provides a correct one.`) // todo fe. React-Toastify
-    // }
     if (urlRegEx.test(name) || regexExp.test(name)) {
       setNewSearch(name)
-      setList(current => [...current, name])
-      console.warn('jest prawdą IP', name)
+      setList(current => [...current, data])
+      console.warn('fetchData()', data)
     } else {
       alert(`Wrong IP address or URL , please provides a correct one.`) // todo fe. React-Toastify
     }
-
   }
-
+  
   return (
     <>
+    {/* {console.log('%c Oh my all data 2! ', 'background: #765', data)} */}
       <div className="columns">
 
         <div className="column is-4">
@@ -47,16 +56,15 @@ function App() {
         </div>
 
         <div className="column">
-          Second column
 
           <div className="columns is-5">
             <div className="column">
               Map with user location
-              <Leaflet />
+              {data && data.latitude && data.longitude} ? <Leaflet data={data}/> : {'dupa'}
             </div>
             <div className="column">
               Information with user location
-              <MainUserLocation />
+              <MainUserLocation data={data} />
             </div>
           </div>
 
@@ -64,12 +72,12 @@ function App() {
             <div className="column">
               <div className="field is-grouped">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Find a repository" value={name} onChange={(e) => setName(e.target.value)}></input>
+                  <input className="input" type="text" placeholder="Find IP or URL" value={name} onChange={(e) => setName(e.target.value)}></input>
 
                 </p>
                 <p className="control">
                   <button className="button is-info" onClick={onClickHandle}>
-                    Search:
+                    Search
                   </button>
                 </p>
               </div>
@@ -79,22 +87,17 @@ function App() {
           <div className="columns">
             <div className="column">
               Map with last user location
-              <Leaflet />
+              <Leaflet data={list[list.length - 1]}/>
             </div>
             <div className="column">
               Information about lats search
-              <MainUserLocation />
+              <MainUserLocation data={list[list.length - 1]} />
             </div>
           </div>
 
         </div>
 
       </div>
-      {/* <MapUserLocation /> */}
-
-
-
-
     </>
   );
 }

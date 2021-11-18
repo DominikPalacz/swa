@@ -1,32 +1,26 @@
 import { useState, useEffect } from "react";
-import './App.css';
+import axios from 'axios';
 import MainUserLocation from '../src/components/MainUserLocation';
+import ListOdAllSearches from "./components/ListOfAllSearches";
 import Leaflet from './components/Map';
-import 'bulma/css/bulma.min.css';
 import urlRegEx from "../src/utils/urlRegEx"
 import regexExp from "../src/utils/checkIP"
-import ListOdAllSearches from "./components/ListOfAllSearches";
-import axios from 'axios';
+import './App.css';
+import 'bulma/css/bulma.min.css';
 
 function App() {
-  // create global state - can use Redux but atm it's overkill
+  // TODO create global state - can use Redux but atm it's overkill
   const [name, setName] = useSesionStorage("name", "");
   const [list, setList] = useState([]);
   const [data, setCurrentData] = useState({ });
-  const [newSearch, setNewSearch] = useState("");
   
   useEffect(() => {
     const fetchData = async () => {
       const value = name ? name : 'check';
       const result = await axios(
-        `http://api.ipstack.com/${value}?access_key=17fa3c31eeb1d8677517482a8e88bc0b`, // todo 1 add process.env
+        `http://api.ipstack.com/${value}?access_key=924fecef7c399f4f8398bc01103377ae`, // TODO add process.env and create separate api Call Services.js
       );
-      console.log(result)
       setCurrentData(result.data);
-      // console.log('%c Oh my name name! ', 'background: #987', name);
-      // console.log('%c Oh my all list! ', 'background: #876', list);
-      // console.log('%c Oh my all data! ', 'background: #765', data);
-      // console.log('%c Oh my newSearch! ', 'background: #654', newSearch);
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -35,23 +29,19 @@ function App() {
   const onClickHandle = (e) => {
     e.stopPropagation();
     if (urlRegEx.test(name) || regexExp.test(name)) {
-      setNewSearch(name)
       setList(current => [...current, data])
-      console.warn('fetchData()', data)
     } else {
-      alert(`Wrong IP address or URL , please provides a correct one.`) // todo fe. React-Toastify
+      alert(`Wrong IP address or URL , please provides a correct one.`) // TODO add fe. React-Toastify
     }
   }
   
+  // TODO divide huge component to small dumb and smart components
+  // TODO implement forms with formik.js
   return (
     <>
-    {/* {console.log('%c Oh my all data 2! ', 'background: #765', data)} */}
-      <div className="columns">
-
+      <div className="columns main">
         <div className="column is-4">
           List of all searches
-          <p>{list.length}</p>
-          <pre>{regexExp.test(name)}</pre>
           <ListOdAllSearches list={list} />
         </div>
 
@@ -60,7 +50,7 @@ function App() {
           <div className="columns is-5">
             <div className="column">
               Map with user location
-              {data && data.latitude && data.longitude} ? <Leaflet data={data}/> : {'dupa'}
+              <Leaflet data={data}/>
             </div>
             <div className="column">
               Information with user location
@@ -73,7 +63,6 @@ function App() {
               <div className="field is-grouped">
                 <p className="control is-expanded">
                   <input className="input" type="text" placeholder="Find IP or URL" value={name} onChange={(e) => setName(e.target.value)}></input>
-
                 </p>
                 <p className="control">
                   <button className="button is-info" onClick={onClickHandle}>

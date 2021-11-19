@@ -15,10 +15,11 @@ function App() {
   const [data, setCurrentData] = useState({ });
   
   useEffect(() => {
+    const keyApi = '5f8707a725e5c7a80a7a502818f90968'
     const fetchData = async () => {
       const value = name ? name : 'check';
       const result = await axios(
-        `http://api.ipstack.com/${value}?access_key=924fecef7c399f4f8398bc01103377ae`, // TODO add process.env and create separate api Call Services.js
+        `http://api.ipstack.com/${value}?access_key=${keyApi}`, // TODO add process.env and create separate api Call Services.js
       );
       setCurrentData(result.data);
     };
@@ -31,7 +32,7 @@ function App() {
     if (urlRegEx.test(name) || regexExp.test(name)) {
       setList(current => [...current, data])
     } else {
-      alert(`Wrong IP address or URL , please provides a correct one.`) // TODO add fe. React-Toastify
+      alert(`Wrong IP address or URL or Access Restricted - Your current Subscription Plan does not support HTTPS Encryption, please provides a correct one.`) // TODO add fe. React-Toastify
     }
   }
   
@@ -62,7 +63,7 @@ function App() {
             <div className="column">
               <div className="field is-grouped">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Find IP or URL" value={name} onChange={(e) => setName(e.target.value)}></input>
+                  <input className="input" type="text" placeholder="Find IP or URL fe. www.onet.pl" value={name} onChange={(e) => setName(e.target.value)}></input>
                 </p>
                 <p className="control">
                   <button className="button is-info" onClick={onClickHandle}>

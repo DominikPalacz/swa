@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { MapContainer, TileLayer, FeatureGroup, Marker, Popup } from 'react-leaflet';
 import { EditControl } from 'react-leaflet-draw';
+
 import 'leaflet-draw';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
@@ -35,7 +36,7 @@ const Leaflet = ({ data }) => {
             <MapContainer
                 center={[data.latitude, data.longitude]}
                 whenCreated={e => console.error(e)}
-                zoom={13}
+                zoom={1}
                 style={{ height: '30vh' }}>
                 <TileLayer
                     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

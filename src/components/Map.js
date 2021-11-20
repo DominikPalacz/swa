@@ -35,7 +35,6 @@ const Leaflet = ({ data }) => {
         data && data.latitude && data.longitude ?
             <MapContainer
                 center={[data.latitude, data.longitude]}
-                whenCreated={e => console.error(e)}
                 zoom={1}
                 style={{ height: '30vh' }}>
                 <TileLayer

@@ -15,7 +15,7 @@ function App() {
   const [data, setCurrentData] = useState({ });
   
   useEffect(() => {
-    const keyApi = '5f8707a725e5c7a80a7a502818f90968'
+    const keyApi = '96fd3a4387eca059959573eb415f784a'
     const fetchData = async () => {
       const value = name ? name : 'check';
       const result = await axios(

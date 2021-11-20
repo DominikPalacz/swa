@@ -36,6 +36,8 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "eslint-plugin-react": "^7.27.1",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "husky": "^7.0.0"
   }
 }

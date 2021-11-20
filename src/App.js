@@ -1,41 +1,46 @@
-import { useState, useEffect } from "react";
-import axios from 'axios';
-import MainUserLocation from '../src/components/MainUserLocation';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import MainUserLocation from "../src/components/MainUserLocation";
 import ListOdAllSearches from "./components/ListOfAllSearches";
-import Leaflet from './components/Map';
-import urlRegEx from "../src/utils/urlRegEx"
-import regexExp from "../src/utils/checkIP"
-import './App.css';
-import 'bulma/css/bulma.min.css';
+import Leaflet from "./components/Map";
+import urlRegEx from "../src/utils/urlRegEx";
+import regexExp from "../src/utils/checkIP";
+import "./App.css";
+import "bulma/css/bulma.min.css";
 
 function App() {
   // TODO create global state - can use Redux but atm it's overkill
   const [name, setName] = useSesionStorage("name", "");
   const [list, setList] = useState([]);
-  const [data, setCurrentData] = useState({ });
-  
+  const [data, setCurrentData] = useState({});
+
   useEffect(() => {
-    const keyApi = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_MODE : process.env.REACT_APP_PRO_MODE
+    const keyApi =
+      process.env.NODE_ENV === "development"
+        ? process.env.REACT_APP_DEV_MODE
+        : process.env.REACT_APP_PRO_MODE;
     const fetchData = async () => {
-      const value = name ? name : 'check';
+      const value = name ? name : "check";
       const result = await axios(
-        `http://api.ipstack.com/${value}?access_key=${keyApi}`, // TODO add process.env and create separate api Call Services.js
+        `http://api.ipstack.com/${value}?access_key=${keyApi}` // TODO add process.env and create separate api Call Services.js
       );
       setCurrentData(result.data);
     };
     fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list]);
-  
+
   const onClickHandle = (e) => {
     e.stopPropagation();
     if (urlRegEx.test(name) || regexExp.test(name)) {
-      setList(current => [...current, data])
+      setList((current) => [...current, data]);
     } else {
-      alert(`Wrong IP address or URL or Access Restricted - Your current Subscription Plan does not support HTTPS Encryption, please provides a correct one.`) // TODO add fe. React-Toastify
+      alert(
+        `Wrong IP address or URL or Access Restricted - Your current Subscription Plan does not support HTTPS Encryption, please provides a correct one.`
+      ); // TODO add fe. React-Toastify
     }
-  }
-  
+  };
+
   // TODO divide huge component to small dumb and smart components
   // TODO implement forms with formik.js
   return (
@@ -47,11 +52,10 @@ function App() {
         </div>
 
         <div className="column">
-
           <div className="columns is-5">
             <div className="column">
               Map with user location
-              <Leaflet data={data}/>
+              <Leaflet data={data} />
             </div>
             <div className="column">
               Information with user location
@@ -63,7 +67,13 @@ function App() {
             <div className="column">
               <div className="field is-grouped">
                 <p className="control is-expanded">
-                  <input className="input" type="text" placeholder="Find IP or URL fe. www.onet.pl" value={name} onChange={(e) => setName(e.target.value)}></input>
+                  <input
+                    className="input"
+                    type="text"
+                    placeholder="Find IP or URL fe. www.onet.pl"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                  ></input>
                 </p>
                 <p className="control">
                   <button className="button is-info" onClick={onClickHandle}>
@@ -77,16 +87,14 @@ function App() {
           <div className="columns">
             <div className="column">
               Map with last user location
-              <Leaflet data={list[list.length - 1]}/>
+              <Leaflet data={list[list.length - 1]} />
             </div>
             <div className="column">
               Information about lats search
               <MainUserLocation data={list[list.length - 1]} />
             </div>
           </div>
-
         </div>
-
       </div>
     </>
   );

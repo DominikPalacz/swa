@@ -15,7 +15,7 @@ function App() {
   const [data, setCurrentData] = useState({ });
   
   useEffect(() => {
-    const keyApi = '96fd3a4387eca059959573eb415f784a'
+    const keyApi = process.env.NODE_ENV === 'development' ? process.env.REACT_APP_DEV_MODE : process.env.REACT_APP_PRO_MODE
     const fetchData = async () => {
       const value = name ? name : 'check';
       const result = await axios(
